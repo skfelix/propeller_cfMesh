@@ -1,0 +1,104 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2012                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "mesh";
+    object      meshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+surfaceFile "combined.fms";
+
+// minCellSize 0.0025;
+
+maxCellSize 0.01;
+
+//boundaryCellSize 0.05;
+
+// Refine region 
+surfaceMeshRefinement
+{
+    domain
+    {
+        surfaceFile innerCylinderSmall.stl;
+        additionalRefinementLevels 1;
+        refinementThickness 10;
+    }
+}
+
+objectRefinements
+{
+    box
+    {
+        type        box;
+        additionalRefinementLevels 2;  
+        centre      (0.0 0.0 0.0);
+        lengthX     0.05;
+        lengthY     0.025;
+        lengthZ     0.35;
+        
+    }
+}
+
+// Refine the patches within the mesh
+localRefinement
+{
+    propellerTip
+    {
+        additionalRefinementLevels 4;
+        // cellSize    0.001;
+    }
+}
+
+
+// // Add inflation layers to the patches
+// boundaryLayers 
+// {
+//     //nLayers 3;
+    
+//     thicknessRatio 1.1;
+//     allowDiscontinuity 1;
+    
+//     maxFirstLayerThickness 0.5;
+     
+//     patchBoundaryLayers
+//     {
+//         propellerTip
+//         {
+//             nLayers 5;
+//         }
+//     }
+    
+//     optimiseLayer 1;  
+
+//     optimisationParameters
+//     {
+//         nSmoothNormals 5;
+//         maxNumIterations 5;
+//         featureSizeFactor 0.3;
+//         reCalculateNormals 1;
+//         relThicknessTol 0.1;
+        
+//         /*nSmoothNormals 15;
+// 		maxNumIterations 15;
+// 		featureSizeFactor 0.1;
+// 		relThicknessTol 0.001;*/
+//     } 
+// }
+
+meshQualitySettings
+{
+    //- Maximum non-orthogonality allowed. Set to 180 to disable.
+    maxNonOrtho 65;
+
+    //- Max skewness allowed. Set to <0 to disable.
+    maxSkewness 2;
+}

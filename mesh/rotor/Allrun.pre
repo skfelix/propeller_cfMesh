@@ -1,0 +1,25 @@
+#!/bin/sh
+cd "${0%/*}" || exit                                # Run from this directory
+. ${WM_PROJECT_DIR:?}/bin/tools/RunFunctions        # Tutorial run functions
+#------------------------------------------------------------------------------
+
+#mkdir -p constant/triSurface
+
+# copy propeller surface from resources directory
+#cp -f $FOAM_TUTORIALS/resources/geometry/propeller/* constant/triSurface/
+
+# remove old mesh files
+rm -rf 0/ constant/polyMesh combined.stl combined.fms log*
+cp -r 0.orig 0/
+
+# combine files 
+cat propellerTip.stl innerCylinderSmall.stl > combined.stl
+
+# extract edges
+surfaceFeatureEdges combined.stl combined.fms -angle 5
+
+# mesh
+cartesianMesh
+checkMesh
+
+#------------------------------------------------------------------------------
