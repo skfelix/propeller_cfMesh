@@ -1,0 +1,26 @@
+#!/bin/sh
+cd "${0%/*}" || exit                                # Run from this directory
+. ${WM_PROJECT_DIR:?}/bin/tools/RunFunctions        # Tutorial run functions
+#------------------------------------------------------------------------------
+
+#./Allrun.pre
+# removing old files 
+rm -rf 0 processor* log.decomposePar log.rhoSimpleFoam log.reconstructPar log.renumberMesh postProcessing logs
+rm -rf constant/cellToRegion
+
+# restoring 0 folder
+cp -r 0.orig 0/
+
+# merge meshes 
+cp -r stator/constant/polyMesh constant/
+mergeMeshes . rotor -overwrite
+
+topoSet -dict system/createInletOutletSets.topoSetDict
+
+createPatch -overwrite
+
+checkMesh
+
+topoSet -dict system/createAMIFaces.topoSetDict
+
+#------------------------------------------------------------------------------
